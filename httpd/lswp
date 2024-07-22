@@ -31,7 +31,7 @@ function echoYC {
 OLS_ROOT=/usr/local/lsws
 OLS_CONF_DIR=$OLS_ROOT/conf
 VH_DOMAIN_FILE=$OLS_CONF_DIR/vhosts.conf
-DOWNLOAD_URL=https://raw.githubusercontent.com/mina998/lswp2/main/httpd
+DOWNLOAD_URL=https://raw.githubusercontent.com/mina998/lsphp82/main/httpd
 VHOST_CONF_DIR=$OLS_CONF_DIR/vhosts
 RUN_PATH=/home
 DOC_DIR_NAME=public_html
@@ -182,7 +182,7 @@ function create_site {
     cd $RUN_PARH
     verify_domain
     local alias=$(alias_from_domain $INPUT_VALUE)
-    local site_root=/home/$alias
+    local site_root=/home/$INPUT_VALUE
     local db_pass=$(random_str 10)
     if [ -n "$(is_db_exist $alias)" ]; then
         echoCC "数据库已存在."

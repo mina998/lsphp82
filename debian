@@ -1,11 +1,12 @@
 #!/bin/bash
 DB_VERSION=8.0
 OLS_VERSION=1.8.1
+PHP_VERSION=82
 SRC_PATH=/root/install
 OLS_ROOT=/usr/local/lsws
 OLS_CONF_DIR=$OLS_ROOT/conf
 VH_DOMAIN_FILE=$OLS_CONF_DIR/vhosts.conf
-DOWNLOAD_URL=https://raw.githubusercontent.com/mina998/lswp2/main/httpd
+DOWNLOAD_URL=https://raw.githubusercontent.com/mina998/lsphp82/main/httpd
 RC="\033[38;5;196m"; RR="\033[31m"; GC="\033[38;5;82m"; LG="\033[38;5;72m"; BC="\033[39;1;34m"; SB="\033[38;5;45m"
 CC="\033[38;5;208m"; PC="\033[38;5;201m"; YC="\033[38;5;148m"; ED="\033[0m";
 function echoRC {
@@ -59,7 +60,7 @@ function query_public_ip {
     echo $(curl -s https://ip.idsss.workers.dev)
 }
 apt update -y
-apt-get install socat cron curl wget gnupg unzip iputils-ping apt-transport-https ca-certificates software-properties-common gawk p7zip-full systemd-timesyncd iptables -y
+apt-get install socat cron curl wget gnupg unzip iputils-ping apt-transport-https ca-certificates software-properties-common gawk p7zip-full systemd-timesyncd iptables zstd -y
 [ ! -e "$SRC_PATH" ] && mkdir -p $SRC_PATH
 if [ -d $OLS_ROOT ]; then
     echoRC "检测到OpenLiteSpeed已安装"
@@ -82,9 +83,9 @@ function install_ols {
     sed -i 's/USE_LSPHP7=yes/USE_LSPHP7=no/' ols.conf
     cat ols.conf
     ./install.sh
-    apt install lsphp81 lsphp81-common lsphp81-intl lsphp81-curl lsphp81-opcache lsphp81-imagick lsphp81-mysql lsphp81-memcached -y
+    apt install lsphp${PHP_VERSION} lsphp${PHP_VERSION}-common lsphp${PHP_VERSION}-intl lsphp${PHP_VERSION}-curl lsphp${PHP_VERSION}-opcache lsphp${PHP_VERSION}-imagick lsphp${PHP_VERSION}-mysql lsphp${PHP_VERSION}-memcached -y
     [ -f /usr/bin/php ]  && rm -f /usr/bin/php
-    ln -s $OLS_ROOT/lsphp81/bin/php /usr/bin/php
+    ln -s $OLS_ROOT/lsphp${PHP_VERSION}/bin/php /usr/bin/php
     cd $SRC_PATH && rm -rf *
     curl $DOWNLOAD_URL/httpd_config > $OLS_CONF_DIR/httpd_config.conf
     curl $DOWNLOAD_URL/example.crt -o $OLS_CONF_DIR/example.crt
